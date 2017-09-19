@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>我的首页</title>
+
+		<link rel="stylesheet" type="text/css" media="all" href="mp/styles/theme.css" />
+		<link href="mp/scripts/swiper/swiper.min.css" rel="stylesheet"/>
+		<script type="text/javascript">
+			window.globalApplication = 'mp';
+			var global_root = "mp";
+		</script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery-ui-1.8.15.custom.min.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.fix.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.cookie.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.alerts.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/validate/jquery.validate.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/validate/i18n/messages_zh_CN.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/formatcurrency/jquery.formatCurrency.js"></script>
+		<script type="text/javascript" src="mp/scripts/My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="mp/scripts/custom/project.js"></script>
+		<script type="text/javascript" src="mp/scripts/custom/util.js"></script>
+		<script src="mp/scripts/swiper/swiper.jquery.min.js"></script>
+		<script type="text/javascript">
+			//加载页面
+			function loadPage() {
+				var action = $("#homeForm").attr("action") + "?t=" + new Date().getTime();
+				var params = $("#homeForm").serialize();
+				$("#homeForm").submit();
+			}
+			$(function() {
+				//日志类型
+				$("#system,#nlevel,#type").change(function() {
+					loadPage();
+				});
+				$.post("mp/home/online/clsReviewCount.html", "", function(value) {
+					//备付金挑拨审核笔数
+					if(value.reserveCount > 0) {
+						$("#coverAuditCountID").text(value.reserveCount);
+					} else {
+						$("#frontcoverAuditCountID").removeAttr("class");
+						$("#coverAuditCountID").removeAttr("class");
+					}
+
+					//账户挑拨审核笔数
+					if(value.transferAdjustCount > 0) {
+						$("#accountAuditCountID").text(value.transferAdjustCount);
+					} else {
+						$("#frontaccountAuditCountID").removeAttr("class");
+						$("#accountAuditCountID").removeAttr("class");
+					}
+
+					//账户挑拨审核笔数
+					if(value.transferRecoverCount > 0) {
+						$("#accountAuditCountID2").text(value.transferRecoverCount);
+					} else {
+						$("#frontaccountAuditCountID2").removeAttr("class");
+						$("#accountAuditCountID2").removeAttr("class");
+					}
+
+					//商户结算审核笔数
+					if(value.merSettCount > 0) {
+						$("#merAuditCountID").text(value.merSettCount);
+					} else {
+						$("#frontmerAuditCountID").removeAttr("class");
+						$("#merAuditCountID").removeAttr("class");
+					}
+
+					//内部对账不平账笔数
+					if(value.innerCheckCount > 0) {
+						$("#inCheckCountID").text(value.innerCheckCount);
+					} else {
+						$("#frontinCheckCountID").removeAttr("class");
+						$("#inCheckCountID").removeAttr("class");
+					}
+
+					//外部对账不平账笔数
+					if(value.channelCheckCount > 0) {
+						$("#outCheckCountID").text(value.channelCheckCount);
+					} else {
+						$("#frontoutCheckCountID").removeAttr("class");
+						$("#outCheckCountID").removeAttr("class");
+					}
+
+				}, "json");
+				/* //备付金挑拨审核笔数
+				$.post("mp/home/online/coverAuditCount.html","",function(value){
+					$("#coverAuditCountID").text(value);
+				},"json");
+				//账户挑拨审核笔数
+				$.post("mp/home/online/accountAuditCount.html","",function(value){
+					$("#accountAuditCountID").text(value);
+				},"json");
+				//商户结算审核笔数
+				$.post("mp/home/online/merAuditCount.html","",function(value){
+					$("#merAuditCountID").text(value);
+				},"json");
+				//内部对账不平账笔数
+				$.post("mp/home/online/inCheckCount.html","",function(value){
+					$("#inCheckCountID").text(value);
+				},"json");
+				//外部对账不平账笔数
+				$.post("mp/home/online/outCheckCount.html","",function(value){
+					$("#outCheckCountID").text(value);
+				},"json"); */
+				//自动刷新
+				var intervalTime = 60;
+
+				function refresh() {
+					intervalTime = intervalTime - 1;
+					$("#refreshTime").val(intervalTime + "秒");
+					if(intervalTime == 0) {
+						intervalTime = 60;
+						//加载页面
+						loadPage();
+					}
+				}
+				var interval = setInterval(function() {
+					refresh();
+				}, 1000);
+				$("#autoRefresh").change(function() {
+					if($(this).attr("checked") == "checked") {
+						interval = setInterval(function() {
+							refresh();
+						}, 1000);
+					} else {
+						clearInterval(interval);
+					}
+				});
+				//待办事件
+				$(".open_coverAuditCountID_TABID").click(function() {
+					//子页面调用父类后跳转新窗口
+					window.parent.window.openNewWindow("open_coverAuditCountID_TABID", "备付金调拨审核", "mp/clear/callAcct/audit/list.html?t=review");
+				});
+				$(".open_accountAuditCountID_TABID").click(function() {
+					window.parent.window.openNewWindow("open_accountAuditCountID_TABID", "账户调拨调账审核", "mp/pay/accountAdjust/audit/list.html");
+				});
+				$(".open_accountAuditCountID_TABID2").click(function() {
+					window.parent.window.openNewWindow("open_accountAuditCountID_TABID2", "账户调拨补录审核", "mp/pay/accountAdjust/audit/list.html?adjustType=1");
+				});
+				$(".open_merAuditCountID_TABID").click(function() {
+					window.parent.window.openNewWindow("open_merAuditCountID_TABID", "商户结算审核", "mp/clear/mersettle/redo.html?t=review");
+				});
+				$(".open_inCheckCountID_TABID").click(function() {
+					window.parent.window.openNewWindow("open_inCheckCountID_TABID", "内部对账不平账", "mp/clear/checkinner/review_list.html?t=review");
+				});
+				$(".open_outCheckCountID_TABID").click(function() {
+					window.parent.window.openNewWindow("open_outCheckCountID_TABID", "外部对账不平账", "mp/clear/checkchannel/checklist.html?t=review");
+				});
+				$(".open_gotomoninglog_TABID").click(function() {
+					window.parent.window.openNewWindow("open_gotomoninglog_TABID", "日志监控", "mp/bis/exceptionlog/list.html?t=" + new Date().getTime());
+				});
+
+
+				//滑块
+				var mySwiper = new Swiper('.swiper-container', {
+					loop: true,
+					autoplay: 3000,
+					pagination : '.swiper-pagination',
+					paginationClickable :true
+				});
+			});
+
+			function details(viewId) {
+				$("#viewId").val(viewId);
+				$("#details").submit();
+			}
+		</script>
+	</head>
+
+	<body class="p-iframe">
+		<form id="details" action="mp/home/online/details.html" method="post">
+			<input id="viewId" name="viewId" hidden="true">
+		</form>
+		<div class="m-todo">
+			<h2 class="box-title">常用功能</h2>
+			<!--<h2 style="width: 100%;">【当前账务日期:2017-06-02】</h2>-->
+			<div class="prev"></div>
+			<div class="list">
+				<ul>
+					<li>
+						<a href="javascript:void(0);" class="open_coverAuditCountID_TABID"><img src="mp/images/icon_kj1.png" alt="" /><em>备付金调拨审核</em></a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" class="open_accountAuditCountID_TABID"><img src="mp/images/icon_kj2.png" alt="" /><em>账户调拨调账审核</em></a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" class="open_accountAuditCountID_TABID2"><img src="mp/images/icon_kj3.png" alt="" /><em>账户调拨补录审核</em></a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" class="open_merAuditCountID_TABID"><img src="mp/images/icon_kj4.png" alt="" /><em>商户结算审核</em></a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" class="open_inCheckCountID_TABID"><img src="mp/images/icon_kj5.png" alt="" /><em>内部对账不平账</em></a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" class="open_outCheckCountID_TABID"><img src="mp/images/icon_kj6.png" alt="" /><em>外部对账不平账</em></a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" class="open_merAuditCountID_TABID"><img src="mp/images/icon_kj4.png" alt="" /><em>商户结算审核</em></a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" class="open_accountAuditCountID_TABID"><img src="mp/images/icon_kj2.png" alt="" /><em>账户调拨调账审核</em></a>
+					</li>
+				</ul>
+			</div>
+			<div class="next"></div>
+			<div class="f-cb"></div>
+		</div>
+		<div class="m-table">
+			<h2 class="box-title">信息公告 <a class="more" href="###">更多></a></h2>
+			<div class="swiper-container">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide">
+						<div class="note-list">
+							<table>
+								<tr>
+									<td class="line">
+										<table>
+											<tr>
+												<td class="img"><img src="mp/images/img.png" /></td>
+												<td>
+													<div>
+														<h4>北京世园会征首批特许商品生产商</h4>
+														<p>北京世园会博览会开始面向社会公开征集 具备开发、设计、生产实力的特许商品生 产商。此次拟征集不超过10家企业，征集 截止到3月31日。
+															<a href="##">详细了解></a>
+														</p>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+									<td class="line">
+										<table>
+											<tr>
+												<td class="img"><img src="mp/images/img.png" /></td>
+												<td>
+													<div>
+														<h4>北京世园会征首批特许商品生产商</h4>
+														<p>北京世园会博览会开始面向社会公开征集 具备开发、设计、生产实力的特许商品生 产商。此次拟征集不超过10家企业，征集 截止到3月31日。
+															<a href="##">详细了解></a>
+														</p>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+									<td>
+										<table>
+											<tr>
+												<td>
+													<div>
+														<h4>北京世园会征首批特许商品生产商</h4>
+														<p>北京世园会博览会开始面向社会公开征集 具备开发、设计、生产实力的特许商品生 产商。此次拟征集不超过10家企业，征集 截止到3月31日。
+															<a href="##">详细了解></a>
+														</p>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="swiper-slide">
+						<div class="note-list">
+							<table>
+								<tr>
+									<td class="line">
+										<table>
+											<tr>
+												<td class="img"><img src="mp/images/img.png" /></td>
+												<td>
+													<div>
+														<h4>北京世园会征首批特许商品生产商</h4>
+														<p>北京世园会博览会开始面向社会公开征集 具备开发、设计、生产实力的特许商品生 产商。此次拟征集不超过10家企业，征集 截止到3月31日。
+															<a href="##">详细了解></a>
+														</p>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+									<td class="line">
+										<table>
+											<tr>
+												<td class="img"><img src="mp/images/img.png" /></td>
+												<td>
+													<div>
+														<h4>北京世园会征首批特许商品生产商</h4>
+														<p>北京世园会博览会开始面向社会公开征集 具备开发、设计、生产实力的特许商品生 产商。此次拟征集不超过10家企业，征集 截止到3月31日。
+															<a href="##">详细了解></a>
+														</p>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+									<td>
+										<table>
+											<tr>
+												<td>
+													<div>
+														<h4>北京世园会征首批特许商品生产商</h4>
+														<p>北京世园会博览会开始面向社会公开征集 具备开发、设计、生产实力的特许商品生 产商。此次拟征集不超过10家企业，征集 截止到3月31日。
+															<a href="##">详细了解></a>
+														</p>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="swiper-slide">
+						<div class="note-list">
+							<table>
+								<tr>
+									<td class="line">
+										<table>
+											<tr>
+												<td class="img"><img src="mp/images/img.png" /></td>
+												<td>
+													<div>
+														<h4>北京世园会征首批特许商品生产商</h4>
+														<p>北京世园会博览会开始面向社会公开征集 具备开发、设计、生产实力的特许商品生 产商。此次拟征集不超过10家企业，征集 截止到3月31日。
+															<a href="##">详细了解></a>
+														</p>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+									<td class="line">
+										<table>
+											<tr>
+												<td class="img"><img src="mp/images/img.png" /></td>
+												<td>
+													<div>
+														<h4>北京世园会征首批特许商品生产商</h4>
+														<p>北京世园会博览会开始面向社会公开征集 具备开发、设计、生产实力的特许商品生 产商。此次拟征集不超过10家企业，征集 截止到3月31日。
+															<a href="##">详细了解></a>
+														</p>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+									<td>
+										<table>
+											<tr>
+												<td>
+													<div>
+														<h4>北京世园会征首批特许商品生产商</h4>
+														<p>北京世园会博览会开始面向社会公开征集 具备开发、设计、生产实力的特许商品生 产商。此次拟征集不超过10家企业，征集 截止到3月31日。
+															<a href="##">详细了解></a>
+														</p>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- 如果需要分页器 -->
+				<div class="swiper-pagination" style="bottom:10px;"></div>
+			</div>
+
+		</div>
+		<div class="m-table">
+			<h2 class="box-title">监控日志</h2>
+			<form id="homeForm" action="mp/home/online/main.html" method="post">
+				<div class="ipt">
+					<label>子系统：</label>
+					<select id="system" name="system" style="color: #040404;">
+						<option></option>
+
+						<option value="ACCESS">业务前置</option>
+
+						<option value="PAY">支付系统</option>
+
+						<option value="ACCOUNT">账务系统</option>
+
+						<option value="CLEAR">清结算系统</option>
+
+						<option value="PORTAL">好运通客户门户</option>
+
+						<option value="MP">运营维护管理平台</option>
+
+						<option value="CHANNEL">资金渠道</option>
+
+						<option value="CBS">公共基础服务</option>
+
+						<option value="BILL">账单系统</option>
+
+					</select>
+				</div>
+				<div class="ipt">
+					<label>日志等级：</label>
+					<select id="nlevel" name="nlevel" style="color: #040404;">
+						<option></option>
+
+						<option value="MESSAGE">信息</option>
+
+						<option value="WARNING">警告</option>
+
+						<option value="ERROR">错误</option>
+
+					</select>
+				</div>
+				<div class="ipt">
+					<label>日志类型：</label>
+					<select id="type" name="type" style="color: #040404;">
+						<option></option>
+
+						<option value="PAY">支付</option>
+
+						<option value="RECHARGE">充值</option>
+
+						<option value="WITHDRAWALS">提现</option>
+
+						<option value="TRANSFER_ACCOUNTS">转账</option>
+
+						<option value="INSIDE_RECONCILIATION">系统内对账</option>
+
+						<option value="CHANNEL_RECONCILIATION">渠道对账</option>
+
+						<option value="CLEARING">清结算</option>
+
+						<option value="ACCOUNT_REFUND">退款</option>
+
+						<option value="EMAIL_CHECK">邮件验证</option>
+
+						<option value="TEN_APP_BUSI">微信公众号/app业务</option>
+
+						<option value="PARK_BUSI">停车业务</option>
+
+						<option value="ACCOUNT_ALLOCATE">资金划拨</option>
+
+						<option value="ACCOUNT_ADJUST">账务调账</option>
+
+						<option value="INNER_ADJUST">系统内调账</option>
+
+						<option value="CHANNEL_ADJUST">渠道调账</option>
+
+						<option value="ACCOUNT">账务记账</option>
+
+						<option value="REDP">红包发放</option>
+
+						<option value="BASE_SERVICE">基础服务</option>
+
+						<option value="CLEAR_INI">监控任务初始化</option>
+
+						<option value="CLEAR_CHANNEL_DOWNLOAD_PARSE">下载解析渠道对账文件</option>
+
+						<option value="CLEAR_MER_FILE_UPLOAD">商户对账文件上传</option>
+
+						<option value="CLEAR_MER_SETTLE_INIT">商户结算初始化</option>
+
+						<option value="CLEAR_MER_SETTLE_COUNT">商户结算统计</option>
+
+						<option value="CLEAR_MER_SETTLE">商户结算</option>
+
+						<option value="CLEAR_SHARE_ACCOUNT">分润统计</option>
+
+						<option value="CLEAR_SHARE">分润</option>
+
+						<option value="CLEAR_SHARE_INIT">分润记录初始化</option>
+
+						<option value="CLEAR_TRANSFER_ACCOUNT">资金调拨统计</option>
+
+						<option value="CLEAR_TRANSFER">资金调拨</option>
+
+						<option value="CLEAR_REPORT_INIT">清结算报表初始化</option>
+
+						<option value="PAY_ACCOUNT_FEE_FILE_UPLOAD">手续费计费支付对账文件上传</option>
+
+						<option value="ACCOUNT_FILE_UPLOAD">账务对账文件上传</option>
+
+						<option value="ACCOUNT_CHECK_INIT">账务监控记录初始化</option>
+
+						<option value="PAY_CHECK_INIT">支付监控记录初始化</option>
+
+						<option value="SEND_SMS">发送短信</option>
+
+						<option value="SEND_EMAIL">发送邮件</option>
+
+						<option value="SEND_WEBCHAT">发送微信</option>
+
+						<option value="NEXT_SETTLEDAY">计算下一个结算日</option>
+
+						<option value="NEXT_SHAREDAY">计算下一个分润日</option>
+
+						<option value="DAY_CUT">日切</option>
+
+						<option value="OBTAIN_SETTLEDAY">获取商户结算日</option>
+
+						<option value="ACCESS_41">前置取短信验证码</option>
+
+						<option value="ACCESS_42">前置用户注册</option>
+
+						<option value="ACCESS_43">前置用户登录</option>
+
+						<option value="ACCESS_44">前置修改密码</option>
+
+						<option value="ACCESS_45">前置找回密码</option>
+
+						<option value="ACCESS_46">前置绑定/解绑车牌</option>
+
+						<option value="ACCESS_47">前置开通/停用服务</option>
+
+						<option value="ACCESS_48">前置绑定银行卡</option>
+
+						<option value="ACCESS_49">前置解绑银行卡</option>
+
+						<option value="ACCESS_50">前置默认支付方式</option>
+
+						<option value="ACCESS_51">前置消息推送</option>
+
+						<option value="ACCESS_52">前置红包发放</option>
+
+						<option value="ACCESS_53">前置车辆找回</option>
+
+						<option value="ACCESS_54">前置用户查询</option>
+
+						<option value="ACCESS_55">前置商户查询</option>
+
+						<option value="ACCESS_56">前置交易列表查询</option>
+
+						<option value="ACCESS_57">前置交易详情查询</option>
+
+						<option value="ACCESS_58">前置已绑车辆查询</option>
+
+						<option value="ACCESS_59">前置已绑银行卡查询</option>
+
+						<option value="ACCESS_60">前置找回车辆查询</option>
+
+						<option value="ACCESS_80">前置停车缴费查询</option>
+
+						<option value="ACCESS_81">前置账单列表查询</option>
+
+						<option value="ACCESS_82">前置账单消费明细查询</option>
+
+						<option value="ACCESS_83">前置账单账户查询</option>
+
+						<option value="ACCESS_84">前置账单账户开通</option>
+
+						<option value="ACCESS_85">前置用户开通自动还款查询</option>
+
+						<option value="ACCESS_86">前置开通关闭自动还款</option>
+
+						<option value="ACCESS_87">前置微信还款</option>
+
+						<option value="ACT_61">获取账单系统结算文件</option>
+
+						<option value="ACT_62">上传结算结果文件</option>
+
+						<option value="ACT_63">商户结算资金划拨任务</option>
+
+						<option value="ACT_64">解析商户结算资金划拨文件</option>
+
+						<option value="BILL_70">账单系统日志</option>
+
+						<option value="BILL_71">账户开通</option>
+
+						<option value="BILL_72">消费记账</option>
+
+						<option value="BILL_73">账单锁定</option>
+
+						<option value="BILL_74">还款</option>
+
+						<option value="BILL_75">账单参数修改</option>
+
+						<option value="BILL_76">冻结解冻账户</option>
+
+						<option value="BILL_77">停启用账户</option>
+
+						<option value="BILL_78">账单退款</option>
+
+					</select>
+				</div>
+				<div class="ipt">
+					&nbsp;
+				</div>
+				<div class="ipt" style="padding-top:-35px;">
+					<input type="button" id="refreshTime" class="action" value="60秒" style="margin-top:3px;position:relative;bottom:2px;
+					background: #fef8f9;border: 1px solid #f8e0de;display: inline-block;text-align: center;line-height: 20px;width: 43px;" />
+				</div>
+				<div class="ipt">
+					<input type="checkbox" id="autoRefresh" checked="checked" /><label for="autoRefresh">自动刷新</label>
+				</div>
+				<div class="ipt">
+					<a href="javascript:void(0);" class="open_gotomoninglog_TABID">查看更多>></a>
+				</div>
+			</form>
+			<table>
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>记录时间</th>
+						<th>子系统</th>
+						<th>日志等级</th>
+						<th>日志类型</th>
+						<th>日志全路径</th>
+						<th>错误内容</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr class="" href="javascript:void(0)" onDblclick="details('a85909cc62fc49e29c49442e074cb6c5')">
+						<td>1</td>
+						<td>2017-06-06 15:10:33</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置用户注册</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">手机号已被使用</td>
+					</tr>
+
+					<tr class="gray" href="javascript:void(0)" onDblclick="details('49afcdb4980a47f8a9a783e3bdb1a0e2')">
+						<td>2</td>
+						<td>2017-06-06 15:10:33</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置用户注册</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">手机号已被使用</td>
+					</tr>
+
+					<tr class="" href="javascript:void(0)" onDblclick="details('e84e0805313346ce84b34c2b9c591796')">
+						<td>3</td>
+						<td>2017-06-06 15:10:33</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置用户注册</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">手机号已被使用</td>
+					</tr>
+
+					<tr class="gray" href="javascript:void(0)" onDblclick="details('f4464ce0b4164ccabfd2f032e9b233f8')">
+						<td>4</td>
+						<td>2017-06-06 15:10:33</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置用户注册</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">手机号已被使用</td>
+					</tr>
+
+					<tr class="" href="javascript:void(0)" onDblclick="details('c190abbe4ad04f7ea288369b99f7b7eb')">
+						<td>5</td>
+						<td>2017-06-06 15:10:33</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置用户注册</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">手机号已被使用</td>
+					</tr>
+
+					<tr class="gray" href="javascript:void(0)" onDblclick="details('4097e50a9e7b4360b7a6a2dad7dc7261')">
+						<td>6</td>
+						<td>2017-06-06 15:10:33</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置用户注册</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">手机号已被使用</td>
+					</tr>
+
+					<tr class="" href="javascript:void(0)" onDblclick="details('d8bdf59992ae48b6bb6e48e74c263732')">
+						<td>7</td>
+						<td>2017-06-06 15:10:33</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置用户注册</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">手机号已被使用</td>
+					</tr>
+
+					<tr class="gray" href="javascript:void(0)" onDblclick="details('5053f79ceff140e9a59d8594870eaec7')">
+						<td>8</td>
+						<td>2017-06-06 15:10:33</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置用户注册</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">手机号已被使用</td>
+					</tr>
+
+					<tr class="" href="javascript:void(0)" onDblclick="details('ed19c211d52743299eb3a8e75742badb')">
+						<td>9</td>
+						<td>2017-06-06 15:10:33</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置用户注册</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">手机号已被使用</td>
+					</tr>
+
+					<tr class="gray" href="javascript:void(0)" onDblclick="details('bf56996769ae462c823832e5dd9de8d0')">
+						<td>10</td>
+						<td>2017-06-06 15:10:33</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置用户注册</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">手机号已被使用</td>
+					</tr>
+
+					<tr class="" href="javascript:void(0)" onDblclick="details('811624c77f7d4f4992239c9503a5d85e')">
+						<td>11</td>
+						<td>2017-06-06 15:09:29</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置用户注册</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">手机号已被使用</td>
+					</tr>
+
+					<tr class="gray" href="javascript:void(0)" onDblclick="details('a212209dd4a4442483ed5a5daf1f50e2')">
+						<td>12</td>
+						<td>2017-06-06 14:59:59</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置绑定/解绑车牌</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">车牌已经被其他用户绑定</td>
+					</tr>
+
+					<tr class="" href="javascript:void(0)" onDblclick="details('e41db427a070448aa4781e0a205bd82b')">
+						<td>13</td>
+						<td>2017-06-06 14:59:23</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置绑定/解绑车牌</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">车牌已经被其他用户绑定</td>
+					</tr>
+
+					<tr class="gray" href="javascript:void(0)" onDblclick="details('be4b245d73bd41d09087ebbae3d29fe1')">
+						<td>14</td>
+						<td>2017-06-06 14:54:13</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置绑定/解绑车牌</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">schema验证失败：cvc-......</td>
+					</tr>
+
+					<tr class="" href="javascript:void(0)" onDblclick="details('2661f786383846119e22e456045552f7')">
+						<td>15</td>
+						<td>2017-06-06 14:49:58</td>
+						<td>业务前置</td>
+						<td>错误</td>
+						<td>前置绑定/解绑车牌</td>
+						<td>/home/inetpay/uat/access/inetpay-access.log</td>
+						<td class="red">车牌已经被其他用户绑定</td>
+					</tr>
+
+				</tbody>
+			</table>
+			<!-- 分页控件引入 -->
+
+			<div class="m-pages">
+				<div class="f-fr">
+					共334504条记录，共22301页，每页显示
+					<select onchange="location.href='?pageNumber=1&pageSize='+this.value">
+						<option value="10">10</option>
+						<option value="15" selected="selected">15</option>
+						<option value="20">20</option>
+						<option value="50">50</option>
+						<option value="100">100</option>
+					</select> 条记录
+				</div>
+				<div class="f-fr">
+
+					<a href="javascript:void(0);" title="上一页" class="active">&lt;</a>
+
+					<a href="javascript:void(0)" class="active">1</a>
+
+					<a href="?pageNumber=2&pageSize=15">2</a>
+
+					<a href="?pageNumber=3&pageSize=15">3</a>
+
+					<a href="?pageNumber=4&pageSize=15">4</a>
+
+					<a href="?pageNumber=5&pageSize=15">5</a>
+
+					<a href="?pageNumber=6&pageSize=15">6</a>
+
+					<a href="?pageNumber=7&pageSize=15">7</a>
+
+					<a href="?pageNumber=8&pageSize=15">8</a>
+
+					<a href="?pageNumber=9&pageSize=15">9</a>
+
+					<a href="?pageNumber=11155&pageSize=15">...</a>
+
+					<a href="?pageNumber=22301&pageSize=15">22301</a>
+
+					<a href="?pageNumber=2&pageSize=15" title="下一页">&gt;</a>
+
+				</div>
+				<div class="f-cb"></div>
+			</div>
+		</div>
+
+		<script>
+			var l = $(".m-table tr").length;
+			$(".m-pages .num").click(function() {
+				$(this).children(".select").toggle();
+				$(this).toggleClass("index");
+			});
+			for(i = 0; i < l; i++) {
+				$(".m-table .set").eq(i).css("z-index", l - i);
+			}
+			var cds = $(".m-todo .list ul").children("li");
+			var ulw = cds.length * 190;
+			var ml2 = ulw - 950;
+			var ml3 = ulw - 190;
+			$(".m-todo .list ul").width(ulw);
+			var ml = 0;
+			//图片缩略图向右
+			$(".m-todo .prev").click(function() {
+				if(Math.abs(ml) < ml3) {
+					ml -= 190;
+					$(".m-todo .list ul").animate({
+						marginLeft: ml + "px"
+					}, 200, "swing");
+				} else {
+					$(".m-todo .list ul").animate({
+						marginLeft: 0 + "px"
+					}, 1000, "swing");
+					ml = 0;
+				}
+			});
+			//图片缩略图向左
+			$(".m-todo .next").click(function() {
+				if(ml >= 760) {
+					$(".m-todo .list ul").animate({
+						marginLeft: -ml2 + "px"
+					}, 1000, "swing");
+					ml = -ml2;
+				} else {
+					ml += 190;
+					$(".m-todo .list ul").animate({
+						marginLeft: ml + "px"
+					}, 200, "swing");
+				}
+			});
+		</script>
+	</body>
+
+</html>

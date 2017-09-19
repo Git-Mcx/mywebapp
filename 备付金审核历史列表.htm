@@ -1,0 +1,220 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>备付金审核历史列表</title>
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+		<link rel="stylesheet" type="text/css" media="all" href="mp/styles/theme.css"/>
+		<script type="text/javascript">
+			window.globalApplication='mp';
+			var global_root="mp";
+		</script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery-ui-1.8.15.custom.min.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.fix.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.cookie.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.alerts.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/validate/jquery.validate.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/validate/i18n/messages_zh_CN.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/formatcurrency/jquery.formatCurrency.js"></script>
+		<script type="text/javascript" src="mp/scripts/My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="mp/scripts/custom/project.js"></script>
+		<script type="text/javascript" src="mp/scripts/custom/util.js"></script>
+
+	
+	<script type="text/javascript">
+		//明细
+		function viewForm(viewId){  
+			$("#viewId").val(viewId);
+			$("#viewQueryForm").submit();
+		} 
+		function queryForm(){
+			$("#queryDateType").val('');
+			$("#listQueryForm").submit();
+		}
+		function queryTimeForm(queryDateType){
+			$("#queryDateType").val(queryDateType);
+			$("#listQueryForm").submit();
+		}
+		function resetForm(){
+			$("#listQueryForm :input").not(":button, :submit, :reset, :hidden").val("").removeAttr("checked").remove("selected");
+		}
+		$(function() {
+			$("#startCreateTime").click(
+					function() {
+						WdatePicker({
+							maxDate : !$("#endCreateTime").val() ? new Date() : $("#endCreateTime").val(),
+							dateFm : "yyyy-MM-dd"
+						});
+					});
+			$("#endCreateTime").click(function() {
+				WdatePicker({
+					minDate : $("#startCreateTime").val(),
+					maxDate : new Date(),
+					dateFm : "yyyy-MM-dd"
+				});
+			});
+		});
+		//导出
+		function exportForm(){  
+		    var path = "mp/clear/callAcct/export.html";  
+		    $('#listQueryForm').attr("action", path).submit();
+		    //导出后还原Action
+		    var oldpath = "mp/clear/callAcct/audit/result/list.html"; 
+		    $('#listQueryForm').attr("action", oldpath);
+		}  
+	</script>
+</head>
+<body class="p-iframe">
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<form id="viewQueryForm" action="mp/clear/callAcct/audit/result/view.html" method="post">
+		<input type="hidden" id="viewId" name="viewId" />
+	</form>
+	<div class="m-searchform">
+		<form id="listQueryForm" action="mp/clear/callAcct/audit/result/list.html" method="post">
+		<input type="hidden" id="searchFlag" name="searchFlag" value="1"/>
+			<div class="ipt">
+				<label style="width: 100px">创建起止日期：</label>
+				<input type="text" id="startCreateTime" name=startCreateTime style="width: 83px;cursor: pointer;" value="2017-06-06" class="Wdate"/>至
+				<input type="text" id="endCreateTime" name="endCreateTime" value="2017-06-06" style="width: 83px;cursor: pointer;" class="Wdate"/>
+			</div>
+			<div class="ipt">
+				<div class="btn" style="border-top: 0px solid;">
+						<input type="hidden" id="queryDateType" name="queryDateType"/>
+						<a href="javascript:void(0)" onclick="queryTimeForm('1');"><i class="i-query"></i>今天</a>
+						<a href="javascript:void(0)" onclick="queryTimeForm('2');"><i class="i-query"></i>最近一个月</a>
+						<a href="javascript:void(0)" onclick="queryTimeForm('3');"><i class="i-query"></i>1年</a>
+				</div>
+			</div>
+			<div class="btn">
+				<div class="f-fr">
+					<a href="javascript:void(0)" onclick="queryForm();"><i class="i-query"></i>查询</a>
+					<a href="javascript:void(0)" onclick="resetForm();"><i class="i-reset"></i>重置</a>
+					<a href="javascript:void(0)" onclick="exportForm();"><img src="mp/images/red/downLoad.png" style="line-height: 1px"/>&nbsp;&nbsp;下载</a>
+				</div>
+				<div class="f-cb"></div>
+			</div>
+		</form>
+	</div>
+	<div class="m-table">
+		<table>
+			<thead>
+				<tr>
+					<th>序号</th>
+					<th>创建日期</th>
+					<th>付款方行别</th>
+					<th>付款方账号</th>
+					<th>收款方行别</th>
+					<th>收款方账号</th>
+					<th>金额(元)</th>
+					<th>账务日期</th>
+					<th>状态</th>
+					<th class="operCol">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+				
+					<tr><td colspan="9" class="emptyRecord">没有记录</td></tr>
+				
+			</tbody>
+		</table>
+		<!-- 分页控件引入 -->
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="m-pages">
+	<div class="f-fr">
+		共0条记录，共1页，每页显示 
+		<select onchange="location.href='?pageNumber=1&pageSize='+this.value">
+			<option value="10" >10</option>
+			<option value="15" selected="selected">15</option>
+			<option value="20" >20</option>
+			<option value="50" >50</option>
+			<option value="100" >100</option>
+		</select> 条记录
+	</div>
+	<div class="f-fr">
+		
+			<a href="javascript:void(0);" title="上一页" class="active">&lt;</a>
+		
+		
+		
+		
+			
+				
+				
+					
+						<a href="javascript:void(0)" class="active" >1</a>
+					
+					
+				
+			
+		
+		
+		
+			<a href="javascript:void(0);" title="下一页" class="active">&gt;</a>
+		
+		
+	</div>
+	<div class="f-cb"></div>
+</div>
+	</div>
+</body>
+</html>

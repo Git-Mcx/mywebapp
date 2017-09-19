@@ -1,0 +1,296 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>商户结算异常列表</title>
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+		<link rel="stylesheet" type="text/css" media="all" href="mp/styles/theme.css"/>
+		<script type="text/javascript">
+			window.globalApplication='mp';
+			var global_root="mp";
+		</script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery-ui-1.8.15.custom.min.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.fix.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.cookie.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.alerts.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/validate/jquery.validate.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/validate/i18n/messages_zh_CN.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/formatcurrency/jquery.formatCurrency.js"></script>
+		<script type="text/javascript" src="mp/scripts/My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="mp/scripts/custom/project.js"></script>
+		<script type="text/javascript" src="mp/scripts/custom/util.js"></script>
+
+	
+	<script type="text/javascript">
+	$(function(){
+		//确认结算成功
+		$(".reviewBtnCls").click(function(){
+			var action = $(this).attr("rel");
+			jConfirm("您确认结算成功[<font color='blue'>"+$(this).attr("data")+"</font>]吗？","提示",function(rtn){
+				if(rtn){
+					window.location.href=action;
+				}
+			});
+		});
+		
+	});
+		function queryForm(){
+			$("#queryDateType").val('');
+			$("#listQueryForm").submit();
+		}
+		function queryTimeForm(queryDateType){
+			$("#queryDateType").val(queryDateType);
+			$("#listQueryForm").submit();
+		}
+		function queryTimeForm_1(queryDateType_1){
+			$("#queryDateType_1").val(queryDateType_1);
+			$("#listQueryForm").submit();
+		}
+		function resetForm(){
+			$("#listQueryForm :input").not(":button, :submit, :reset, :hidden").val("").removeAttr("checked").remove("selected");
+		}
+		//导出
+		function exportForm(){  
+		    var path = "mp/clear/mersettle/export.html";  
+		    $('#listQueryForm').attr("action", path).submit();
+		    //导出后还原Action
+		    var oldpath = "mp/clear/mersettle/list.html"; 
+		    $('#listQueryForm').attr("action", oldpath);
+		}  
+		function redoForm(id){  
+			$("#id").val(id);
+			$("#redoQueryForm").submit();
+		}  
+		function viewForm(keyId){  
+			$("#viewId").val(keyId);
+			$("#viewQueryForm").submit();
+		}  
+	</script>
+</head>
+<body class="p-iframe">
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<form id="viewQueryForm" action="mp/clear/mersettle/view.html" method="post">
+		<input type="hidden" id="startTimeView" name="startTimeView" value="2017-06-06"/>
+		<input type="hidden" id="endTimeView" name="endTimeView" value="2017-06-06"/>
+		<input type="hidden" id="mersettleid" name="mersettleid" value=""/>
+		<input type="hidden" id="pageFlag" name="pageFlag" value=""/>
+		<input type="hidden" id="viewId" name="viewId" />
+	</form>
+	<form id="redoQueryForm" action="mp/clear/mersettle/reSettlementAppeal.html" method="post">
+		<input type="hidden" id="id" name="id" />
+		<input type="hidden" id="pageFlag" name="pageFlag" value="1"/>
+	</form>
+	<div class="m-searchform">
+		<form id="listQueryForm" action="mp/clear/mersettle/list.html" method="post">
+			<input type="hidden" id="searchFlag" name="searchFlag" value="1"/>
+			<div class="ipt">
+				<label style="width: 100px">计划结算日期：</label>
+				<input type="text" id="startTime" name="startTime" 
+				onclick="WdatePicker({ el:'startTime', dateFmt: 'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endTime\')}'})" 
+				value="2017-06-06" class="Wdate" readonly="readonly" style="width: 83px;cursor: pointer;"/>
+					至
+					<input type="text" id="endTime" name="endTime" 
+					onclick="WdatePicker({ el:'endTime', dateFmt: 'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\')}'})" 
+					value="2017-06-06" class="Wdate" readonly="readonly" style="width: 83px;cursor: pointer;"/>
+			</div>	
+			<div class="ipt">
+				<div class="btn" style="border-top: 0px solid;">
+						<input type="hidden" id="queryDateType" name="queryDateType"/>
+						<a href="javascript:void(0)" onclick="queryTimeForm('1');"><i class="i-query"></i>今天</a>
+						<a href="javascript:void(0)" onclick="queryTimeForm('2');"><i class="i-query"></i>最近一个月</a>
+						<a href="javascript:void(0)" onclick="queryTimeForm('3');"><i class="i-query"></i>1年</a>
+				</div>
+			</div>
+			<div class="ipt">
+				<label>商户编号：</label>
+				<input type="text" name="merCode" value="" />
+			</div>
+			<div class="ipt">
+				<label  style="width: 100px">实际结算日期：</label>
+				<input type="text" id="minTime" name="minTime" 
+				onclick="WdatePicker({ el:'minTime', dateFmt: 'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'maxTime\')}'})" 
+				value="" class="Wdate" readonly="readonly" style="width: 83px;cursor: pointer;"/>
+					至
+					<input type="text" id="maxTime" name="maxTime" 
+					onclick="WdatePicker({ el:'maxTime', dateFmt: 'yyyy-MM-dd',minDate:'#F{$dp.$D(\'minTime\')}'})" 
+					value="" class="Wdate" readonly="readonly" style="width: 83px;cursor: pointer;"/>
+			</div>	
+			<div class="ipt">
+				<div class="btn" style="border-top: 0px solid;">
+						<input type="hidden" id="queryDateType_1" name="queryDateType_1"/>
+						<a href="javascript:void(0)" onclick="queryTimeForm_1('1');"><i class="i-query"></i>今天</a>
+						<a href="javascript:void(0)" onclick="queryTimeForm_1('2');"><i class="i-query"></i>最近一个月</a>
+						<a href="javascript:void(0)" onclick="queryTimeForm_1('3');"><i class="i-query"></i>1年</a>
+				</div>
+			</div>
+			
+			<div class="ipt">
+				<label>结算状态：</label>
+				<select name="status">
+					<option></option>
+					
+						<option value="COUNT" >统计</option>	
+					
+						<option value="SETTLEMENT" >统计完成</option>	
+					
+						<option value="SETTL_FEE_FAIL" >手续费结算失败</option>	
+					
+						<option value="SETTL_BANK_FAIL" selected="selected">商户结算失败</option>	
+					
+						<option value="SUCCESS" >成功</option>	
+					
+				</select>
+			</div>
+			<div class="ipt">
+				<label style="width: 100px">处理状态：</label>
+				<select name="dealStatus">
+					<option></option>
+					
+						<option value="UN_PROCESS" >未处理</option>	
+					
+						<option value="PROCESSING" >处理中</option>	
+					
+						<option value="PROCESS_FAIL" >处理失败</option>	
+					
+						<option value="PROCESS_SUCCESS" >处理成功</option>	
+					
+				</select>
+			</div>
+			<div class="btn">
+				
+				<div class="f-fr">
+					<a href="javascript:void(0)" onclick="queryForm();"><i class="i-query"></i>查询</a>
+					<a href="javascript:void(0)" onclick="resetForm();"><i class="i-reset"></i>重置</a>
+					<a href="javascript:void(0)" onclick="exportForm();"><img src="mp/images/red/downLoad.png" style="line-height: 1px"/>&nbsp;&nbsp;下载</a>
+				</div>
+				<div class="f-cb"></div>
+			</div>
+		</form>
+	</div>
+	
+	<div class="m-table">
+		<table>
+			<thead>
+				<tr>
+					<th>序号</th>										
+					<th>计划结算日期</th>
+					<th>实际结算日期</th>
+					<th>商户编号</th>
+					<th>商户名称</th>
+					<th>结算明细笔数</th>
+					<th>结算金额(元)</th>
+					<th>实收金额(元)</th>
+					<th>手续费(元)</th>
+					<th>结算状态</th>
+					<!-- <th>处理状态</th> -->
+					<th>失败原因</th>
+					<th class="operCol">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+				
+					<tr><td colspan="13" class="emptyRecord">没有记录</td></tr>
+				
+			</tbody>
+		</table>
+		<!-- 分页控件引入 -->
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="m-pages">
+	<div class="f-fr">
+		共0条记录，共1页，每页显示 
+		<select onchange="location.href='?pageNumber=1&pageSize='+this.value">
+			<option value="10" >10</option>
+			<option value="15" selected="selected">15</option>
+			<option value="20" >20</option>
+			<option value="50" >50</option>
+			<option value="100" >100</option>
+		</select> 条记录
+	</div>
+	<div class="f-fr">
+		
+			<a href="javascript:void(0);" title="上一页" class="active">&lt;</a>
+		
+		
+		
+		
+			
+				
+				
+					
+						<a href="javascript:void(0)" class="active" >1</a>
+					
+					
+				
+			
+		
+		
+		
+			<a href="javascript:void(0);" title="下一页" class="active">&gt;</a>
+		
+		
+	</div>
+	<div class="f-cb"></div>
+</div>
+	</div>
+</body>
+</html>

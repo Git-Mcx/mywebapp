@@ -1,0 +1,93 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>短信发送记录详情</title>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+		<link rel="stylesheet" type="text/css" media="all" href="mp/styles/theme.css"/>
+		<script type="text/javascript">
+			window.globalApplication='mp';
+			var global_root="mp";
+		</script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery-ui-1.8.15.custom.min.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.fix.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.cookie.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.alerts.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/validate/jquery.validate.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/validate/i18n/messages_zh_CN.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/formatcurrency/jquery.formatCurrency.js"></script>
+		<script type="text/javascript" src="mp/scripts/My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="mp/scripts/custom/project.js"></script>
+		<script type="text/javascript" src="mp/scripts/custom/util.js"></script>
+
+	
+
+<script type="text/javascript">
+	function viewForm(pageChannelCode) {
+		$("#pageChannelCode").val(pageChannelCode);
+		$("#viewQueryForm").submit();
+	}
+	
+</script>
+</head>
+<body class="p-iframe">
+	<form id="viewQueryForm" action="mp/chl/channel/detailslist.html"method="post">
+		<input type="hidden" id="pageChannelCode" name="pageChannelCode" />
+	</form>
+	<input type="hidden" id="pageChannelCode" name="pageChannelCode" />
+	<div class="m-juese">
+		<table>
+			<tr>
+				<th class="f-fw"><label>渠道编码：</label></th>
+				<td>030204</td>
+				<th class="f-fw"><label>参数代码：</label></th>
+				<td>BANK_AREA_CD</td>
+			</tr>
+			<tr>
+				<th class="f-fw"><label>参数名称：</label></th>
+				<td>地区代码</td>
+				<th class="f-fw"><label>参数值：</label></th>
+				<td>500000</td>
+			</tr>
+			<tr>
+				<th class="f-fw" ><label>描述：</label></th>
+				<td colspan="3">邮储银行地区代码</td>
+			</tr>
+		</table>
+		<div class="btn">
+			<a class="formbtn back" href="javascript:void(0)"onclick="viewForm('030204');">返回</a>
+		</div>
+	</div>
+</body>
+</html>

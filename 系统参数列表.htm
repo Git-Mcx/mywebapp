@@ -1,0 +1,478 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>系统参数列表</title>
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+		<link rel="stylesheet" type="text/css" media="all" href="mp/styles/theme.css"/>
+		<script type="text/javascript">
+			window.globalApplication='mp';
+			var global_root="mp";
+		</script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery-ui-1.8.15.custom.min.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.fix.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.cookie.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/jquery.alerts.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/validate/jquery.validate.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/validate/i18n/messages_zh_CN.js"></script>
+		<script type="text/javascript" src="mp/scripts/jquery/plugins/formatcurrency/jquery.formatCurrency.js"></script>
+		<script type="text/javascript" src="mp/scripts/My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="mp/scripts/custom/project.js"></script>
+		<script type="text/javascript" src="mp/scripts/custom/util.js"></script>
+
+	
+	<script type="text/javascript">
+		function queryForm(){
+			$("#listQueryForm").submit();
+		}
+		function resetForm(){
+			$("#listQueryForm :input").not(":button, :submit, :reset, :hidden").val("").removeAttr("checked").remove("selected");
+		}
+		//明细
+		function editForm(viewId){  
+			$("#viewId").val(viewId);
+			$("#viewQueryForm").submit();
+		}  
+	</script>
+</head>
+<body class="p-iframe">
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<form id="viewQueryForm" action="mp/bis/systemparam/edit.html" method="post">
+		<input type="hidden" id="viewId" name="viewId" />
+	</form>
+	<div class="m-searchform">
+		<form id="listQueryForm" action="mp/bis/systemparam/list.html" method="post">
+			<div class="ipt">
+				<label>组名：</label>
+				<input type="text" name="groupName" value="" placeholder="支持模糊查询"/>
+			</div>
+			<div class="ipt">
+				<label>名称：</label>
+				<input type="text" name="key" value="" />
+			</div>
+			<div class="ipt">
+				<label>参数值：</label>
+				<input type="text" name="value" value="" />
+			</div>
+			<div class="btn">
+				<div class="f-fr">
+					<a href="javascript:void(0)" onclick="queryForm();"><i class="i-query"></i>查询</a>
+					<a href="javascript:void(0)" onclick="resetForm();"><i class="i-reset"></i>重置</a>
+				</div>
+				<div class="f-cb"></div>
+			</div>
+		</form>
+	</div>
+	<div class="m-table">
+		<table>
+			<thead>
+				<tr>
+					<th>序号</th>
+					<th>组名</th>
+					<th>名称</th>
+					<th>参数值</th>
+					<th>描述</th>
+					<th>创建时间</th>
+					<th class="operCol">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+					<tr class="">
+						<td>1</td>
+						<td>其他组</td>
+						<td>PARKINGLOT_URL</td>
+						<td>http://172.17.1.223:8080/search/car</td>						
+						<td>停车场url</td>
+						<td>2017-04-28 00:00:00</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0107');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="gray">
+						<td>2</td>
+						<td>其他组</td>
+						<td>BINDBANKCARD_REQOTHER</td>
+						<td>0</td>						
+						<td>请求多应用数据系统查询银行卡信息（1是，0否）</td>
+						<td>2017-04-05 00:00:00</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0106');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="">
+						<td>3</td>
+						<td>其他组</td>
+						<td>IMPORTORGINFO_OPENBILL</td>
+						<td>0</td>						
+						<td>导入机构信息是否开通记账支付功能(1为开，0不开)</td>
+						<td>2017-03-10 00:00:00</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0104');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="gray">
+						<td>4</td>
+						<td>其他组</td>
+						<td>PAYRECHARGE_TIMEOUT</td>
+						<td>1</td>						
+						<td>网关充值支付超时时间(小时)</td>
+						<td>2017-02-22 00:00:00</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0103');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="">
+						<td>5</td>
+						<td>系统URL</td>
+						<td>CHANNEL_INTER_PRE_URL</td>
+						<td>http://192.168.1.150:9090/channel-pre</td>						
+						<td>渠道前置内网地址</td>
+						<td>2017-01-16 11:00:38</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0102');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="gray">
+						<td>6</td>
+						<td>系统URL</td>
+						<td>CHANNEL_PSBC_PRE_URL</td>
+						<td>http://192.168.1.150:8082/channel-pre</td>						
+						<td>渠道邮储前置内网地址</td>
+						<td>2017-01-16 11:00:38</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0105');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="">
+						<td>7</td>
+						<td>系统URL</td>
+						<td>CHANNEL_URL</td>
+						<td>http://192.168.1.150:9090/channel</td>						
+						<td>渠道地址</td>
+						<td>2017-01-16 11:00:38</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0101');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="gray">
+						<td>8</td>
+						<td>系统URL</td>
+						<td>CHANNEL_PRE_URL</td>
+						<td>https://183.3.152.202:8034/channel-pre</td>						
+						<td>渠道前置地址</td>
+						<td>2017-01-16 11:00:38</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0100');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="">
+						<td>9</td>
+						<td>FTP组</td>
+						<td>CLS_CHECKOUT_URL</td>
+						<td>192.168.1.155</td>						
+						<td>商户结算资金划拨FTP地址</td>
+						<td>2016-11-30 11:09:11</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0087');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="gray">
+						<td>10</td>
+						<td>FTP组</td>
+						<td>CLS_CHECKOUT_UPLOAD_LOCAL</td>
+						<td>/cls/upload/</td>						
+						<td>商户结算资金划拨上传文件本地存放地址</td>
+						<td>2016-11-30 11:09:11</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0088');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="">
+						<td>11</td>
+						<td>FTP组</td>
+						<td>CLS_CHECKOUT_DOWN_LOCAL</td>
+						<td>/cls/download/</td>						
+						<td>商户结算资金划拨下载文件本地存放地址</td>
+						<td>2016-11-30 11:09:11</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0089');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="gray">
+						<td>12</td>
+						<td>其他组</td>
+						<td>MER_SETTLE_TRANS_TIME</td>
+						<td>01:30:00</td>						
+						<td>商户结算资金划拨执行时间</td>
+						<td>2016-11-29 18:20:06</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0081');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="">
+						<td>13</td>
+						<td>FTP组</td>
+						<td>CLS_CHECKOUT_UPLOAD_PATH</td>
+						<td>/cls/uat/settlementfile/upload/</td>						
+						<td>商户结算资金划拨清算结果上传路径 </td>
+						<td>2016-11-29 16:42:03</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0086');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="gray">
+						<td>14</td>
+						<td>FTP组</td>
+						<td>CLS_CHECKOUT_FTP_PORT</td>
+						<td>21</td>						
+						<td>商户结算资金划拨FTP端口</td>
+						<td>2016-11-29 09:18:26</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0083');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+					<tr class="">
+						<td>15</td>
+						<td>FTP组</td>
+						<td>CLS_CHECKOUT_CHL_FTP_USER</td>
+						<td>hismart</td>						
+						<td>商户结算资金划拨FTP用户名</td>
+						<td>2016-11-29 09:17:58</td>
+						<td>
+							<div class="set">
+								<i class="i-set"></i> 
+								<span>
+									<a href="javascript:void(0)" onclick="editForm('0084');">修改</a>
+								</span>
+							</div>
+						</td>
+					</tr>
+				
+				
+			</tbody>
+		</table>
+		<!-- 分页控件引入 -->
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="m-pages">
+	<div class="f-fr">
+		共69条记录，共5页，每页显示 
+		<select onchange="location.href='?pageNumber=1&pageSize='+this.value">
+			<option value="10" >10</option>
+			<option value="15" selected="selected">15</option>
+			<option value="20" >20</option>
+			<option value="50" >50</option>
+			<option value="100" >100</option>
+		</select> 条记录
+	</div>
+	<div class="f-fr">
+		
+			<a href="javascript:void(0);" title="上一页" class="active">&lt;</a>
+		
+		
+		
+		
+			
+				
+				
+					
+						<a href="javascript:void(0)" class="active" >1</a>
+					
+					
+				
+			
+		
+			
+				
+				
+					
+					
+						<a href="?pageNumber=2&pageSize=15" >2</a>
+					
+				
+			
+		
+			
+				
+				
+					
+					
+						<a href="?pageNumber=3&pageSize=15" >3</a>
+					
+				
+			
+		
+			
+				
+				
+					
+					
+						<a href="?pageNumber=4&pageSize=15" >4</a>
+					
+				
+			
+		
+			
+				
+				
+					
+					
+						<a href="?pageNumber=5&pageSize=15" >5</a>
+					
+				
+			
+		
+		
+		
+		
+			<a href="?pageNumber=2&pageSize=15" title="下一页">&gt;</a>
+		
+	</div>
+	<div class="f-cb"></div>
+</div>
+	</div>
+</body>
+</html>
